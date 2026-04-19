@@ -1,11 +1,10 @@
 import discord
 import random
 import os
-
 TOKEN = os.getenv("TOKEN")
 
-if TOKEN is None:
-    raise Exception("TOKEN chưa được set trong Render Environment Variables")
+if not TOKEN:
+    raise ValueError("TOKEN chưa được set trong environment variables")
 
 intents = discord.Intents.default()
 intents.message_content = True
