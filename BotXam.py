@@ -1,6 +1,24 @@
 import discord
 import random
 import os
+import http.server
+import socketserver
+from threading import Thread
+# --- ĐOẠN CODE MỞ CỔNG GIẢ CHO RENDER ---
+def keep_alive():
+    class Handler(http.server.SimpleHTTPRequestHandler):
+        def do_GET(self):
+            self.send_response(200)
+            self.end_headers()
+            self.wfile.write(b"Bot is running!")
+
+    def run_server():
+        # Render mặc định dùng cổng 10000 hoặc bạn có thể lấy từ biến môi trường
+        port = int(os.environ.get("PORT", 10000))
+        with socketserver.TCPServer(("0.0.0.0", port), Handler) as httpd:
+            httpd.serve_forever()
+
+    Thread(target=run_server, daemon=True).start()
 TOKEN = os.getenv("TOKEN")
 
 if not TOKEN:
@@ -48,4 +66,5 @@ async def on_message(message):
         await message.channel.send(shuffled[index])
         index += 1
 
+keep_alive()
 client.run(TOKEN)
