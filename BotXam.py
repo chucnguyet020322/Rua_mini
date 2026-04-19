@@ -4,6 +4,9 @@ import os
 
 TOKEN = os.getenv("TOKEN")
 
+if TOKEN is None:
+    raise Exception("TOKEN chưa được set trong Render Environment Variables")
+
 intents = discord.Intents.default()
 intents.message_content = True
 
